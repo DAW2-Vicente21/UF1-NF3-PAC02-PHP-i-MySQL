@@ -1,6 +1,6 @@
 <?php
 // connect to mysqli
-$db = mysqli_connect(gethostname(), 'root', 'root') or 
+$db = mysqli_connect('localhost', 'root', 'root') or 
     die ('Unable to connect. Check your connection parameters.');
 
 //make sure you're using the correct database

@@ -1,8 +1,7 @@
 <?php
 $db = mysqli_connect('localhost', 'root', 'root') or die ('Unable to connect. Check your connection parameters.');
 mysqli_select_db($db,'moviesite') or die(mysqli_error($db));
-
-$noRegistros = 4; //Registros por página
+$noRegistros = 1; //Registros por página
 $pagina = 1; //Por defecto pagina = 1
 if($_GET['pagina'])
     $pagina = $_GET['pagina']; //Si hay pagina, lo asigna
@@ -14,7 +13,6 @@ $result = mysqli_query($db,$sSQL) or die(mysqli_error($db));
 	
 //Exploracion de registros
 echo "<table>";
-
 while($row = mysqli_fetch_array($result)) { 
 	echo "<tr><td height=80 align=center>";
 	echo $row["movie_id"]."<br>";
@@ -26,7 +24,7 @@ while($row = mysqli_fetch_array($result)) {
 }
 
 //Imprimiendo paginacion
-$sSQL = "SELECT count(*) FROM movie WHERE movie_name LIKE '$buskr'"; //Cuento el total de registros
+$sSQL = "SELECT count(*) FROM movie WHERE movie_name LIKE '%$buskr%'"; //Cuento el total de registros
 $result = mysqli_query($db,$sSQL);
 $row = mysqli_fetch_array($result);
 $totalRegistros = $row["count(*)"]; //Almaceno el total en una variable

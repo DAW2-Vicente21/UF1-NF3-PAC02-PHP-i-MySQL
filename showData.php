@@ -1,14 +1,14 @@
 <?php
-$db = mysqli_connect(gethostname(), 'root', 'root') or 
+$db = mysqli_connect('localhost', 'root', 'root') or 
     die ('Unable to connect. Check your connection parameters.');
 mysqli_select_db($db,'moviesite') or die(mysqli_error($db));
 
 $query = 'SELECT
-        movie_name, people_fullname, 
+        m.movie_name, p.people_fullname
     FROM
-        movie, people
+        movie m, people p
     WHERE
-        movie.movie_LeadActor = people.people_id';
+        m.movie_leadactor = p.people_id';
 
 $result = mysqli_query($db,$query) or die(mysqli_error($db));
 
@@ -23,4 +23,3 @@ while ($row = mysqli_fetch_assoc($result)) {
 }
 echo '</table>';
 ?>
-

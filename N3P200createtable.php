@@ -1,38 +1,50 @@
 <?php
-// connect to mysqli
-$db = mysqli_connect(gethostname(), 'root', 'root') or 
+//connect to MySQL
+$db = mysqli_connect('localhost', 'root', 'root') or 
     die ('Unable to connect. Check your connection parameters.');
 
-//make sure you're using the correct database
+//create the main database if it doesn't already exist
+$query = 'CREATE DATABASE IF NOT EXISTS moviesite';
+mysqli_query($db,$query) or die(mysqli_error($db));
+
+//make sure our recently created database is the active one
 mysqli_select_db($db,'moviesite') or die(mysqli_error($db));
 
-// insert data into the movie table
-$query = 'INSERT INTO movie
-        (movie_id, movie_name, movie_type, movie_year, movie_leadactor,
-        movie_director)
-    VALUES
-        (4, "Titanic", 10, 1997, 7, 2),
-        (5, "Romeo + Juliet", 10, 1996, 7, 6),
-        (6, "The Wolf of Wall Street", 5, 2013, 7, 8)';
+//create the movie table
+$query = 'CREATE TABLE movie (
+        movie_id        INTEGER UNSIGNED  NOT NULL AUTO_INCREMENT, 
+        movie_name      VARCHAR(255)      NOT NULL, 
+        movie_type      TINYINT           NOT NULL DEFAULT 0, 
+        movie_year      SMALLINT UNSIGNED NOT NULL DEFAULT 0, 
+        movie_leadactor INTEGER UNSIGNED  NOT NULL DEFAULT 0, 
+        movie_director  INTEGER UNSIGNED  NOT NULL DEFAULT 0, 
+
+        PRIMARY KEY (movie_id),
+        KEY movie_type (movie_type, movie_year) 
+    ) 
+    ENGINE=MyISAM';
+mysqli_query($db,$query) or die (mysqli_error($db));
+
+//create the movietype table
+$query = 'CREATE TABLE movietype ( 
+        movietype_id    TINYINT UNSIGNED NOT NULL AUTO_INCREMENT, 
+        movietype_label VARCHAR(100)     NOT NULL, 
+        PRIMARY KEY (movietype_id) 
+    ) 
+    ENGINE=MyISAM';
 mysqli_query($db,$query) or die(mysqli_error($db));
 
-// insert data into the movietype table
-$query = 'INSERT INTO movietype 
-        (movietype_id, movietype_label)
-    VALUES 
-        (9, "Thriller"),
-        (10, "Romance"),
-        (11, "Western")';
+//create the people table
+$query = 'CREATE TABLE people ( 
+        people_id         INTEGER UNSIGNED    NOT NULL AUTO_INCREMENT, 
+        people_fullname   VARCHAR(255)        NOT NULL, 
+        people_isactor    TINYINT(1) UNSIGNED NOT NULL DEFAULT 0, 
+        people_isdirector TINYINT(1) UNSIGNED NOT NULL DEFAULT 0, 
+
+        PRIMARY KEY (people_id)
+    ) 
+    ENGINE=MyISAM';
 mysqli_query($db,$query) or die(mysqli_error($db));
 
-// insert data into the people table
-$query  = 'INSERT INTO people
-        (people_id, people_fullname, people_isactor, people_isdirector)
-    VALUES
-        (7, "Leonardo DiCaprio", 1, 0),
-        (8, "Martin Scorsese", 0, 1),
-        (9, "Steven Spielberg", 0, 1)';
-mysqli_query($db,$query) or die(mysqli_error($db));
-
-echo 'Data inserted successfully!';
+echo 'Movie database successfully created!';
 ?>
